@@ -18,7 +18,7 @@ const stages = [
   { id: 3, name: 'end' }
 ]
 
-const guessesQty = 3
+const guessesQty = 6
 
 function App() {
   // useState para controlar os estágios do jogo
@@ -36,7 +36,7 @@ function App() {
   const [guessedLetters, setGuessedLetters] = useState([])
   const [wrongLetters, setWrongLetters] = useState([])
   const [guesses, setGuesses] = useState(guessesQty)
-  const [score, setScore] = useState(50)
+  const [score, setScore] = useState(0)
 
   // Funções
 
@@ -56,6 +56,7 @@ function App() {
     const word =
       words[category][Math.floor(Math.random() * words[category].length)]
 
+    // Controle
     // console.log(word)
 
     return { word, category }
@@ -142,13 +143,16 @@ function App() {
   // useEffect para monitorar os pontos
   useEffect(() => {
     const uniqueLetters = [...new Set(letters)]
-    if (guessedLetters.length === uniqueLetters.length) {
+    if (
+      guessedLetters.length === uniqueLetters.length &&
+      gameStage === stages[1].name
+    ) {
       setScore(actualScore => (actualScore += 100))
 
       startGame()
     }
     // console.log(uniqueLetters)
-  }, [guessedLetters, letters, startGame])
+  }, [guessedLetters, letters, startGame, gameStage])
 
   const retry = () => {
     // Ao reiniciar a partida o placar de pontos é zerado
